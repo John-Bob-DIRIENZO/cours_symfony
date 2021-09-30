@@ -1,0 +1,23 @@
+{# J'indique de quel fichier j'hérite #}
+{% extends 'base.html.twig' %}
+
+{# j'utilise parent() #}
+{% block title %}
+    {{ parent() }}
+    Question
+{% endblock %}
+
+{# Puis quel block je remplace #}
+{% block body %}
+    <h1>{{ question }}</h1>
+
+    <div>
+        <h2>Il y a {{ answers|length }} réponses</h2>
+        <ul>
+            {% for answer in answers %}
+                <li>{{ answer }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
