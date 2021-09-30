@@ -2,22 +2,35 @@
 {% extends 'base.html.twig' %}
 
 {# j'utilise parent() #}
-{% block title %}
-    {{ parent() }}
-    Question
-{% endblock %}
+{% block title %}Question{% endblock %}
 
 {# Puis quel block je remplace #}
 {% block body %}
-    <h1>{{ question }}</h1>
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <img src="{{ asset('images/cute_cat.jpg') }}" class="bd-placeholder-img rounded-circle" width="140"
+                 height="140" style="object-fit: cover">
+            <h1 class="display-5 fw-bold">{{ question }}</h1>
+            <p><small>
+                    Par: Francis <br/>
+                    Il y a 8 minutes
+                </small></p>
+            <h2 class="mb-3 mt-5">Il y a {{ answers|length }} réponses</h2>
+            <button class="btn btn-primary mb-5">Répondre</button>
+            <ul class="list-group list-group-flush">
+                {% for answer in answers %}
+                    <li class="list-group-item clearfix">
+                        Paul : {{ answer }}
+                        <div class="col float-end">
+                            <button class="badge bg-success">vote up</button>
+                            <button class="badge bg-danger">vote down</button>
+                            <span class="badge bg-secondary mx-3">+6</span>
+                        </div>
 
-    <div>
-        <h2>Il y a {{ answers|length }} réponses</h2>
-        <ul>
-            {% for answer in answers %}
-                <li>{{ answer }}</li>
-            {% endfor %}
-        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock %}
 

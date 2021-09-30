@@ -14,7 +14,7 @@ class QuestionController extends AbstractController
      */
     public function homepage()
     {
-        return new Response('Hello World (again) !');
+        return $this->render('question/homepage.html.twig', []);
     }
 
     /**
@@ -27,6 +27,8 @@ class QuestionController extends AbstractController
             'As tu essayé de fermer les fenêtres et de recommencer ?',
             'Crame tout !'
         ];
+
+        dump($this);
 
         return $this->render('question/show.html.twig', [
             'question' => sprintf('La question posée est : %s', $ma_wildcard),

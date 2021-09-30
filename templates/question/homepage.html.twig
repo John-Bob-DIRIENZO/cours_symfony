@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-4">Vos questions</h1>
+            <p class="col-md-8 fs-4">Et même des réponses à des questions auquelles vous n'avez pas encore pensé</p>
+            <button class="btn btn-primary" type="button">Posez votre question</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="shadow p-3 mb-5 bg-body rounded">
+                <div class="q-container p-4">
+                    <div class="row">
+                        <div class="col-2 text-center">
+                            <img src="{{ asset('images/cute_cat.jpg') }}" width="100" height="100"
+                                 class="bd-placeholder-img rounded-circle">
+                            <div class="d-block mt-3 vote-arrows">
+                                <a class="vote-up" href="#"><i class="far fa-arrow-alt-circle-up"></i></a>
+                                <a class="vote-down" href="#"><i class="far fa-arrow-alt-circle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <a class="q-title" href="#"><h2>Rendre une pizza</h2></a>
+                            <div class="q-display p-3">
+                                <i class="fa fa-quote-left mr-3"></i>
+                                <p class="d-inline">
+                                    Ma pizza finalement ne convient pas à mon intérieur, est-il possible de la retourner
+                                    au magasin ?
+                                </p>
+                                <p class="pt-4"><strong>--Tisha</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="answer-link" href="#" style="color: #fff;">
+                    <p class="q-display-response text-center p-3">
+                        <i class="fa fa-magic magic-wand"></i> 6 answers
+                    </p>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-12 mt-3">
+            <div class="shadow p-3 mb-5 bg-body rounded">
+                <div class="q-container p-4">
+                    <div class="row">
+                        <div class="col-2 text-center">
+                            <img src="{{ asset('images/cute_cat.jpg') }}" width="100" height="100"
+                                 class="bd-placeholder-img rounded-circle">
+                            <div class="d-block mt-3 vote-arrows">
+                                <a class="vote-up" href="#"><i class="far fa-arrow-alt-circle-up"></i></a>
+                                <a class="vote-down" href="#"><i class="far fa-arrow-alt-circle-down"></i></a>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <a class="q-title" href="#"><h2>Apprendre le front flip</h2></a>
+                            <div class="q-display p-3">
+                                <i class="fa fa-quote-left mr-3"></i>
+                                <p class="d-inline">
+                                    Je suis super doué pour la galipette arrière mais la dernière fois que j'ai tenté un
+                                    front flip, j'ai fini avec 6 mois d'ITT
+                                </p>
+                                <p class="pt-4"><strong>--Jerry</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a class="answer-link" href="#" style="color: #fff;">
+                    <p class="q-display-response text-center p-3">
+                        <i class="fa fa-magic magic-wand"></i> 15 answers
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
