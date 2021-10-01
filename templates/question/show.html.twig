@@ -21,10 +21,11 @@
                 {% for answer in answers %}
                     <li class="list-group-item clearfix">
                         Paul : {{ answer }}
-                        <div class="col float-end">
-                            <button class="badge bg-success">vote up</button>
-                            <button class="badge bg-danger">vote down</button>
-                            <span class="badge bg-secondary mx-3">+6</span>
+
+                        <div class="col float-end js-vote">
+                            <button class="badge bg-success js-vote-up" data-direction="up">vote up</button>
+                            <button class="badge bg-danger js-vote-down" data-direction="down">vote down</button>
+                            <span class="badge bg-secondary mx-3 js-vote-total">6</span>
                         </div>
 
                     </li>
@@ -32,5 +33,10 @@
             </ul>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/question_show.js') }}"></script>
 {% endblock %}
 

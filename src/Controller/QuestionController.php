@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class QuestionController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/", name="app_homepage")
      * @return Response
      */
     public function homepage()
@@ -18,7 +18,7 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/questions/{ma_wildcard}")
+     * @Route("/questions/{ma_wildcard}", name="app_show")
      */
     public function show($ma_wildcard)
     {
