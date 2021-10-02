@@ -11,10 +11,18 @@
             <img src="{{ asset('images/cute_cat.jpg') }}" class="bd-placeholder-img rounded-circle" width="140"
                  height="140" style="object-fit: cover">
             <h1 class="display-5 fw-bold">{{ question }}</h1>
-            <p><small>
-                    Par: Francis <br/>
-                    Il y a 8 minutes
-                </small></p>
+
+            <figure>
+                <blockquote class="blockquote">
+
+                    <p>{{ question_text|markdown }}</p>
+
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Francis, <cite title="Source Title">Il y a 8 minutes</cite>
+                </figcaption>
+            </figure>
+
             <h2 class="mb-3 mt-5">Il y a {{ answers|length }} réponses</h2>
             <button class="btn btn-primary mb-5">Répondre</button>
             <ul class="list-group list-group-flush">

@@ -1,0 +1,2 @@
+parameters:
+  cache_system: cache.adapter.filesystem
