@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "knplabs/knp-markdown-bundle": "^1.9",
         "sensio/framework-extra-bundle": "^6.2",
+        "sentry/sentry-symfony": "^4.2",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
@@ -23,6 +24,7 @@
     },
     "require-dev": {
         "symfony/debug-bundle": "5.3.*",
+        "symfony/maker-bundle": "^1.34",
         "symfony/stopwatch": "5.3.*",
         "symfony/web-profiler-bundle": "5.3.*"
     },
