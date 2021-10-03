@@ -13,6 +13,22 @@ composer install
 
 Une fois ceci fait, vous avez un beau projet Symfony prêt
 à être lancé
+Comme nous avons rajouté Doctrine une Database MariaDB 
+avec Docker
 ````
 symfony serve -d
+docker-compose up -d
+symfony console doctrine:migrations:migrate 
+````
+
+Si vous voulez voir la liste des migrations avant de 
+les faire
+````
+symfony console doctrine:migrations:list
+````
+
+Enfin, si vous voulez faire une query pour voir l'état
+de votre DB 
+````
+symfony console doctrine:query:sql '<votre query>'
 ````
