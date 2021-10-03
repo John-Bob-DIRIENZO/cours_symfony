@@ -10,12 +10,13 @@
         <div class="container-fluid py-5">
             <img src="{{ asset('images/cute_cat.jpg') }}" class="bd-placeholder-img rounded-circle" width="140"
                  height="140" style="object-fit: cover">
-            <h1 class="display-5 fw-bold">{{ question }}</h1>
+
+            <h1 class="display-5 fw-bold">{{ question.name }}</h1>
 
             <figure>
                 <blockquote class="blockquote">
 
-                    {{ question_text|markdown_cached }}
+                    {{ question.question|markdown_cached }}
 
                 </blockquote>
                 <figcaption class="blockquote-footer">

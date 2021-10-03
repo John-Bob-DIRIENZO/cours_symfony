@@ -30,7 +30,7 @@ class QuestionController extends AbstractController
         $question->setName('Comment rendre une pizza ?')
             ->setSlug('comment-rendre-une-pizza' . rand(0, 1000))
             ->setQuestion(<<<EOF
-'Ma pizza finalement ne convient pas à mon intérieur, 
+'Ma pizza finalement **ne convient pas** à mon intérieur, 
 est-il possible de la retourner au magasin ?'
 EOF
             );
@@ -53,11 +53,15 @@ EOF
     /**
      * @Route("/questions/{ma_wildcard}", name="app_show")
      */
-    public function show($ma_wildcard, MarkdownHelper $helper)
+    public function show($ma_wildcard, MarkdownHelper $helper, EntityManagerInterface $entityManager)
     {
-        $question_text = "Ma pizza finalement **ne convient pas** à mon intérieur, est-il possible de la retourner au magasin ?";
+        $repository = $entityManager->getRepository(Question::class);
+        $question = $repository->findOneBy(['slug' => $ma_wildcard]);
 
-        $parsedQuestion = $helper->parse($question_text);
+        if (!$question) {
+            // Je vais créer un objet d'Exception, mais qui fait une 404, pas une 500
+            throw $this->createNotFoundException('Rien ici... désolé !');
+        }
 
         $answers = [
             'Je ne suis pas spécialement magicien moi !',
@@ -66,9 +70,8 @@ EOF
         ];
 
         return $this->render('question/show.html.twig', [
-            'question' => sprintf('La question posée est : %s', $ma_wildcard),
-            'answers' => $answers,
-            'question_text' => $parsedQuestion
+            'question' => $question,
+            'answers' => $answers
         ]);
     }
 }
