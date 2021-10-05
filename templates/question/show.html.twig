@@ -20,9 +20,17 @@
 
                 </blockquote>
                 <figcaption class="blockquote-footer">
-                    Francis, <cite title="Source Title">Il y a 8 minutes</cite>
+                    Francis, <cite title="Source Title">{{ question.askedAt|ago }}</cite>
                 </figcaption>
             </figure>
+
+            <div class="col">
+                <form action="{{ path('app_question_vote', { slug: question.slug }) }}" method="post">
+                    <button class="badge bg-success" name="vote" value="up">vote up</button>
+                    <button class="badge bg-danger" name="vote" value="down">vote down</button>
+                    <span class="badge bg-secondary mx-3">{{ question.votesString }}</span>
+                </form>
+            </div>
 
             <h2 class="mb-3 mt-5">Il y a {{ answers|length }} réponses</h2>
             <button class="btn btn-primary mb-5">Répondre</button>

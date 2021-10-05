@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Question;
-use App\Service\MarkdownHelper;
+use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sentry\State\HubInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,9 +16,13 @@ class QuestionController extends AbstractController
      * @Route("/", name="app_homepage")
      * @return Response
      */
-    public function homepage()
+    public function homepage(QuestionRepository $repository)
     {
-        return $this->render('question/homepage.html.twig', []);
+        $questions = $repository->findAllAskedOrderByNewest();
+
+        return $this->render('question/homepage.html.twig', [
+            'questions' => $questions
+        ]);
     }
 
     /**
@@ -26,43 +30,14 @@ class QuestionController extends AbstractController
      */
     public function new(EntityManagerInterface $entityManager)
     {
-        $question = new Question();
-        $question->setName('Comment rendre une pizza ?')
-            ->setSlug('comment-rendre-une-pizza' . rand(0, 1000))
-            ->setQuestion(<<<EOF
-'Ma pizza finalement **ne convient pas** à mon intérieur, 
-est-il possible de la retourner au magasin ?'
-EOF
-            );
-
-        if (rand(1, 10) > 2) {
-            $question->setAskedAt(new \DateTime(sprintf('-%d days', rand(1, 100))));
-        }
-
-        // Il faut faire les deux pour que ça marche
-        $entityManager->persist($question); // Informe doctrine de l'objet, je peux en avoir plusieurs
-        $entityManager->flush(); // Fait la query
-
-        return new Response(sprintf('Votre question %s et avec l\'id %d est instrit en BDD',
-                $question->getSlug(),
-                $question->getId() // Je récupère l'id après la sauvegarde
-            )
-        );
+        return new Response('Un jour on fera ça...');
     }
 
     /**
-     * @Route("/questions/{ma_wildcard}", name="app_show")
+     * @Route("/questions/{slug}", name="app_show")
      */
-    public function show($ma_wildcard, MarkdownHelper $helper, EntityManagerInterface $entityManager)
+    public function show(Question $question)
     {
-        $repository = $entityManager->getRepository(Question::class);
-        $question = $repository->findOneBy(['slug' => $ma_wildcard]);
-
-        if (!$question) {
-            // Je vais créer un objet d'Exception, mais qui fait une 404, pas une 500
-            throw $this->createNotFoundException('Rien ici... désolé !');
-        }
-
         $answers = [
             'Je ne suis pas spécialement magicien moi !',
             'As tu essayé de fermer les fenêtres et de recommencer ?',
@@ -73,6 +48,40 @@ EOF
             'question' => $question,
             'answers' => $answers
         ]);
+    }
+
+    /**
+     * @Route("/questions/{slug}/vote", name="app_question_vote", methods="POST")
+     * @return Response
+     */
+    public function questionVote(Question $question, Request $request, EntityManagerInterface $entityManager)
+    {
+        $vote = $request->request->get('vote');
+        if ($vote === 'up') {
+            $question->upVote();
+        }
+        elseif ($vote === 'down') {
+            $question->downVote();
+        }
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_show', [
+            'slug' => $question->getSlug()
+        ]);
+    }
+
+    /**
+     * @Route("/questions/{id}/delete")
+     */
+    public function questionDelete($id, EntityManagerInterface $entityManager)
+    {
+        // getReference ne marche qu'avec un id
+        $question = $entityManager->getReference(Question::class, $id);
+        $entityManager->remove($question);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_homepage');
     }
 }
 

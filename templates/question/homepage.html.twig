@@ -10,6 +10,9 @@
         </div>
     </div>
     <div class="row">
+
+        {% for question in questions %}
+
         <div class="col-12">
             <div class="shadow p-3 mb-5 bg-body rounded">
                 <div class="q-container p-4">
@@ -23,58 +26,26 @@
                             </div>
                         </div>
                         <div class="col">
-                            <a class="q-title" href="{{ path('app_show', { ma_wildcard: 'rendre-une-pizza' }) }}"><h2>
-                                    Rendre une pizza</h2></a>
+                            <a class="q-title" href="{{ path('app_show', { slug: question.slug }) }}"><h2>
+                                    {{ question.name }}</h2></a>
                             <div class="q-display p-3">
                                 <i class="fa fa-quote-left mr-3"></i>
                                 <p class="d-inline">
-                                    Ma pizza finalement ne convient pas à mon intérieur, est-il possible de la retourner
-                                    au magasin ?
+                                    {{ question.question|markdown_cached }}
                                 </p>
-                                <p class="pt-4"><strong>--Tisha</strong></p>
+                                <p class="pt-4"><strong>--Tisha</strong>, <small>{{ question.askedAt|ago }}</small></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <a class="btn btn-secondary w-100" href="{{ path('app_show', { ma_wildcard: 'rendre-une-pizza' }) }}">
+                <a class="btn btn-secondary w-100" href="{{ path('app_show', { slug: question.slug }) }}">
                     <i class="fa fa-magic magic-wand"></i> 6 answers
                 </a>
             </div>
         </div>
 
-        <div class="col-12 mt-3">
-            <div class="shadow p-3 mb-5 bg-body rounded">
-                <div class="q-container p-4">
-                    <div class="row">
-                        <div class="col-2 text-center">
-                            <img src="{{ asset('images/cute_cat.jpg') }}" width="100" height="100"
-                                 class="bd-placeholder-img rounded-circle">
-                            <div class="d-block mt-3 vote-arrows">
-                                <a class="vote-up" href="#"><i class="far fa-arrow-alt-circle-up"></i></a>
-                                <a class="vote-down" href="#"><i class="far fa-arrow-alt-circle-down"></i></a>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <a class="q-title"
-                               href="{{ path('app_show', { ma_wildcard: 'apprendre-le-front-flip' }) }}"><h2>Apprendre
-                                    le front flip</h2></a>
-                            <div class="q-display p-3">
-                                <i class="fa fa-quote-left mr-3"></i>
-                                <p class="d-inline">
-                                    Je suis super doué pour la galipette arrière mais la dernière fois que j'ai tenté un
-                                    front flip, j'ai fini avec 6 mois d'ITT
-                                </p>
-                                <p class="pt-4"><strong>--Jerry</strong></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <a class="btn btn-secondary w-100"
-                   href="{{ path('app_show', { ma_wildcard: 'apprendre-le-front-flip' }) }}">
-                    <i class="fa fa-magic magic-wand"></i> 15 answers
-                </a>
-            </div>
-        </div>
+        {% endfor %}
+
     </div>
 {% endblock %}
 
