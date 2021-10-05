@@ -12,13 +12,15 @@ composer install
 ````
 
 Une fois ceci fait, vous avez un beau projet Symfony prêt
-à être lancé
-Comme nous avons rajouté Doctrine une Database MariaDB 
-avec Docker
+à être lancé.
+
+Comme nous avons rajouté Doctrine, une Database MariaDB 
+avec Docker et maintenant des Fixtures !
 ````
 symfony serve -d
 docker-compose up -d
-symfony console doctrine:migrations:migrate 
+symfony console doctrine:migrations:migrate
+symfony console doctrine:fixtures:load
 ````
 
 Si vous voulez voir la liste des migrations avant de 
