@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Factory\AnswerFactory;
 use App\Factory\QuestionFactory;
 use App\Factory\UserFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -14,5 +15,6 @@ class AppFixtures extends Fixture
         QuestionFactory::createMany(10);
         QuestionFactory::new()->notPublished()->many(5)->create();
         UserFactory::createMany(10);
+        AnswerFactory::createMany(100);
     }
 }
