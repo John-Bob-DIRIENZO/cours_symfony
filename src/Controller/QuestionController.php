@@ -38,15 +38,10 @@ class QuestionController extends AbstractController
      */
     public function show(Question $question)
     {
-        $answers = [
-            'Je ne suis pas spécialement magicien moi !',
-            'As tu essayé de fermer les fenêtres et de recommencer ?',
-            'Crame tout !'
-        ];
+        $answers = $question->getAnswers();
 
         return $this->render('question/show.html.twig', [
-            'question' => $question,
-            'answers' => $answers
+            'question' => $question
         ]);
     }
 

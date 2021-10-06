@@ -33,13 +33,13 @@
                                 <p class="d-inline">
                                     {{ question.question|markdown_cached }}
                                 </p>
-                                <p class="pt-4"><strong>--Tisha</strong>, <small>{{ question.askedAt|ago }}</small></p>
+                                <p class="pt-4"><strong>--{{ question.user.firstName }}</strong>, <small>{{ question.askedAt|ago }}</small></p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <a class="btn btn-secondary w-100" href="{{ path('app_show', { slug: question.slug }) }}">
-                    <i class="fa fa-magic magic-wand"></i> 6 answers
+                    <i class="fa fa-magic magic-wand"></i> {{ question.approvedAnswers|length}} answers
                 </a>
             </div>
         </div>

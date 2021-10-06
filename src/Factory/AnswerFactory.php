@@ -35,14 +35,25 @@ final class AnswerFactory extends ModelFactory
         // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
     }
 
+    public function needsApproval(): self
+    {
+        return $this->addState(['status' => Answer::NEEDS_APPROVAL]);
+    }
+
+    public function spam(): self
+    {
+        return $this->addState(['status' => Answer::SPAM]);
+    }
+
     protected function getDefaults(): array
     {
         return [
             'content' => self::faker()->text(80),
-            'username' => self::faker()->userName(),
             'votes' => self::faker()->numberBetween(-20, 50),
             'createdAt' => self::faker()->dateTimeBetween('-1 year'),
-            'question' => QuestionFactory::random()
+            'question' => QuestionFactory::random(),
+            'user' => UserFactory::random(),
+            'status' => Answer::APPROVED
         ];
     }
 

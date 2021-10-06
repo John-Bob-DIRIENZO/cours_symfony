@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résponses populaires{% endblock %}
+
+{% block body %}
+    <div class="p-5 mb-4 bg-light rounded-3 d-flex justify-content-between">
+        <div class="container-fluid py-5">
+            <h1 class="display-4">Nos réponses populaires</h1>
+            <p class="col-md-8 fs-4">Une belle liste</p>
+        </div>
+
+        <form action="{{ path('app_answers_popular') }}">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search"
+                value="{{ app.request.query.get('q') }}"
+                class="form-control"
+                aria-label="search"
+            >
+        </form>
+
+    </div>
+
+
+    <ul class="list-group list-group-flush">
+        {% for answer in answers %}
+
+            <li class="list-group-item clearfix">
+                <small>{{ answer.createdAt|ago }} -- </small>{{ answer.user.firstName }} : {{ answer.content }}
+
+                <div class="col float-end js-vote">
+                    <button class="badge bg-success js-vote-up" data-direction="up" data-id="{{ answer.id }}">vote up</button>
+                    <button class="badge bg-danger js-vote-down" data-direction="down" data-id="{{ answer.id }}">vote down</button>
+                    <span class="badge bg-secondary mx-3 js-vote-total">{{ answer.votes }}</span>
+                </div>
+
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/question_show.js') }}"></script>
+{% endblock %}

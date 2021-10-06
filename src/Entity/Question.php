@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -50,9 +52,16 @@ class Question
     private $votes = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question")
+     * @ORM\OneToMany(targetEntity=Answer::class, mappedBy="question", fetch="EXTRA_LAZY")
+     * @ORM\OrderBy({ "createdAt" = "DESC" })
      */
     private $answers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="question")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
 
     public function __construct()
     {
@@ -150,6 +159,14 @@ class Question
         return $this->answers;
     }
 
+    /**
+     * @return Collection
+     */
+    public function getApprovedAnswers(): Collection
+    {
+        return $this->answers->matching(AnswerRepository::createApprovedCriteria());
+    }
+
     public function addAnswer(Answer $answer): self
     {
         if (!$this->answers->contains($answer)) {
@@ -168,6 +185,18 @@ class Question
                 $answer->setQuestion(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

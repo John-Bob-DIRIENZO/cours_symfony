@@ -20,7 +20,7 @@
 
                 </blockquote>
                 <figcaption class="blockquote-footer">
-                    Francis, <cite title="Source Title">{{ question.askedAt|ago }}</cite>
+                    {{ question.user.firstName }}, <cite title="Source Title">{{ question.askedAt|ago }}</cite>
                 </figcaption>
             </figure>
 
@@ -32,17 +32,18 @@
                 </form>
             </div>
 
-            <h2 class="mb-3 mt-5">Il y a {{ answers|length }} réponses</h2>
+            <h2 class="mb-3 mt-5">Il y a {{ question.approvedAnswers|length }} réponses</h2>
             <button class="btn btn-primary mb-5">Répondre</button>
             <ul class="list-group list-group-flush">
-                {% for answer in answers %}
+                {% for answer in question.approvedAnswers %}
+
                     <li class="list-group-item clearfix">
-                        Paul : {{ answer }}
+                        <small>{{ answer.createdAt|ago }} -- </small>{{ answer.user.firstName }} : {{ answer.content }}
 
                         <div class="col float-end js-vote">
-                            <button class="badge bg-success js-vote-up" data-direction="up">vote up</button>
-                            <button class="badge bg-danger js-vote-down" data-direction="down">vote down</button>
-                            <span class="badge bg-secondary mx-3 js-vote-total">6</span>
+                            <button class="badge bg-success js-vote-up" data-direction="up" data-id="{{ answer.id }}">vote up</button>
+                            <button class="badge bg-danger js-vote-down" data-direction="down" data-id="{{ answer.id }}">vote down</button>
+                            <span class="badge bg-secondary mx-3 js-vote-total">{{ answer.votes }}</span>
                         </div>
 
                     </li>

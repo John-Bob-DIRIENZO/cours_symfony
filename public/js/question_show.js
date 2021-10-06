@@ -3,11 +3,14 @@ $('.js-vote button').click(function (e) {
     e.preventDefault();
 
     let direction = $(e.currentTarget).data('direction');
+    let answer_id = $(e.currentTarget).data('id');
     let pill = $(e.currentTarget).parent().find('.js-vote-total');
 
     $.post(
-        '/comments/1/vote/' + direction,
-        {},
+        '/answers/' + answer_id + '/vote',
+        {
+            direction: direction
+        },
         function (response) {
             pill.text(response.votes);
         }
