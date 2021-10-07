@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Answer;
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,13 +15,20 @@ class AnswerController extends AbstractController
     /**
      * @Route("/answers/popular", name="app_answers_popular")
      */
-    public function mostPopular(AnswerRepository $answerRepository, Request $request)
+    public function mostPopular(AnswerRepository $answerRepository, Request $request, PaginatorInterface $paginator)
     {
         $search = $request->query->get('q');
-        $popularAnswers = $answerRepository->findMostPopular($search);
+        $popularAnswers = $answerRepository->findMostPopularQueryBuilder($search);
+
+        $pagination = $paginator->paginate(
+            $popularAnswers, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
 
         return $this->render('answer/popular.html.twig', [
-            'answers' => $popularAnswers
+            'answers' => $pagination
         ]);
     }
 
@@ -34,8 +41,7 @@ class AnswerController extends AbstractController
 
         if ($direction === 'up') {
             $answer->upVote();
-        }
-        else {
+        } else {
             $answer->downVote();
         }
 

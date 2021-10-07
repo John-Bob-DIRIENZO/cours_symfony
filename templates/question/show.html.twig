@@ -13,6 +13,13 @@
 
             <h1 class="display-5 fw-bold">{{ question.name }}</h1>
 
+            <div class="mb-3">
+                {% for tag in question.tag %}
+                    <span class="badge bg-secondary">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+
+
             <figure>
                 <blockquote class="blockquote">
 

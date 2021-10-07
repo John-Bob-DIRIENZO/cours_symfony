@@ -6,17 +6,17 @@
     <div class="p-5 mb-4 bg-light rounded-3 d-flex justify-content-between">
         <div class="container-fluid py-5">
             <h1 class="display-4">Nos réponses populaires</h1>
-            <p class="col-md-8 fs-4">Une belle liste</p>
+            <p class="col-md-8 fs-4">Une belle liste de {{ answers.getTotalItemCount }} éléments au total</p>
         </div>
 
         <form action="{{ path('app_answers_popular') }}">
             <input
-                type="search"
-                name="q"
-                placeholder="Search"
-                value="{{ app.request.query.get('q') }}"
-                class="form-control"
-                aria-label="search"
+                    type="search"
+                    name="q"
+                    placeholder="Search"
+                    value="{{ app.request.query.get('q') }}"
+                    class="form-control"
+                    aria-label="search"
             >
         </form>
 
@@ -30,14 +30,23 @@
                 <small>{{ answer.createdAt|ago }} -- </small>{{ answer.user.firstName }} : {{ answer.content }}
 
                 <div class="col float-end js-vote">
-                    <button class="badge bg-success js-vote-up" data-direction="up" data-id="{{ answer.id }}">vote up</button>
-                    <button class="badge bg-danger js-vote-down" data-direction="down" data-id="{{ answer.id }}">vote down</button>
+                    <button class="badge bg-success js-vote-up" data-direction="up" data-id="{{ answer.id }}">vote up
+                    </button>
+                    <button class="badge bg-danger js-vote-down" data-direction="down" data-id="{{ answer.id }}">vote
+                        down
+                    </button>
                     <span class="badge bg-secondary mx-3 js-vote-total">{{ answer.votes }}</span>
                 </div>
 
             </li>
         {% endfor %}
     </ul>
+
+    {# display navigation #}
+    <div class="navigation mt-3">
+        {{ knp_pagination_render(answers) }}
+    </div>
+
 {% endblock %}
 
 {% block javascripts %}

@@ -6,6 +6,7 @@ use App\Entity\Answer;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\QueryException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,11 +46,11 @@ class AnswerRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $max
-     * @return Answer[]
+     * @param string|null $search
+     * @return QueryBuilder
      * @throws QueryException
      */
-    public function findMostPopular(string $search = null, int $max = 10): array
+    public function findMostPopularQueryBuilder(string $search = null): QueryBuilder
     {
         $queryBuilder = $this->createQueryBuilder('answer')
             ->addCriteria(self::createApprovedCriteria())
@@ -67,10 +68,7 @@ class AnswerRepository extends ServiceEntityRepository
                 ->setParameter('searchTerm', '%' . $search . '%');
         }
 
-        return $queryBuilder
-            ->setMaxResults($max)
-            ->getQuery()
-            ->getResult();
+        return $queryBuilder;
     }
 
 }

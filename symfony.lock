@@ -124,8 +124,14 @@
     "jean85/pretty-package-versions": {
         "version": "2.0.4"
     },
+    "knplabs/knp-components": {
+        "version": "v3.1.0"
+    },
     "knplabs/knp-markdown-bundle": {
         "version": "1.9.0"
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v5.7.0"
     },
     "knplabs/knp-time-bundle": {
         "version": "v1.16.1"

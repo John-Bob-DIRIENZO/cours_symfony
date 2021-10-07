@@ -26,6 +26,10 @@ class QuestionRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('q')
             ->andWhere('q.askedAt IS NOT NULL')
+            ->leftJoin('q.tag', 'tag')
+            ->addSelect('tag')
+            ->leftJoin('q.user', 'user')
+            ->addSelect('user')
             ->orderBy('q.askedAt', 'DESC')
             ->getQuery() // Pour effectivement créer la query
             ->getResult(); // Récupère les résultats
