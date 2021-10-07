@@ -50,7 +50,8 @@ final class QuestionFactory extends ModelFactory
             'question' => self::faker()->paragraphs(rand(1, 4), true),
             'votes' => rand(-20, 50),
             'askedAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
-            'user' => UserFactory::random()
+            'user' => UserFactory::random(),
+            'tag' => TagFactory::randomRange(0, 5)
         ];
     }
 
