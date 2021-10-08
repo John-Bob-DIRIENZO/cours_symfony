@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SecurityController!{% endblock %}
+
+{% block body %}
+<form method="post" class="w-50 mx-auto">
+    <input class="form-control mb-3"  type="email" name="email" placeholder="Email">
+    <input class="form-control mb-3" type="password" name="password" placeholder="Password">
+
+    <input type="hidden" name="csrf" value="{{ csrf_token('login_form') }}">
+
+    <input class="btn btn-primary" type="submit" value="Login !">
+</form>
+{% endblock %}
+
+
