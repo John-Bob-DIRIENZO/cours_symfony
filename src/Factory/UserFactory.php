@@ -38,6 +38,11 @@ final class UserFactory extends ModelFactory
         $this->hasher = $hasher;
     }
 
+    public function roleAdmin(): self
+    {
+        return $this->addState(['roles' => ['ROLE_SUPER_ADMIN']]);
+    }
+
     protected function getDefaults(): array
     {
         return [

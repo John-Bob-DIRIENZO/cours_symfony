@@ -13,6 +13,7 @@
     {% endblock %}
 </head>
 <body>
+
 <header class="p-3 bg-dark text-white">
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -25,7 +26,8 @@
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li><a href="{{ path('app_homepage') }}" class="nav-link px-2 text-secondary">Home</a></li>
                 <li><a href="{{ path('app_user_index') }}" class="nav-link px-2 text-white">Users</a></li>
-                <li><a href="{{ path('app_answers_popular') }}" class="nav-link px-2 text-white">Popular answers</a></li>
+                <li><a href="{{ path('app_answers_popular') }}" class="nav-link px-2 text-white">Popular answers</a>
+                </li>
                 <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
                 <li><a href="#" class="nav-link px-2 text-white">About</a></li>
             </ul>
@@ -36,12 +38,23 @@
             </form>
 
             <div class="text-end">
-                <a href="{{ path('app_login') }}" type="button" class="btn btn-outline-light me-2">Login</a>
-                <button type="button" class="btn btn-warning">Sign-up</button>
+                {% if is_granted('ROLE_USER') %}
+                    <a href="{{ path('app_logout') }}" type="button" class="btn btn-outline-light me-2">Logout</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" type="button" class="btn btn-outline-light me-2">Login</a>
+                {% endif %}
+                <a href="{{ path('app_user_new') }}" type="button" class="btn btn-warning">Sign-up</a>
             </div>
+
         </div>
     </div>
 </header>
+
+{% if is_granted("IS_IMPERSONATOR") %}
+    <div class="alert alert-warning" role="alert">
+        Attention, vous n'êtes pas réellement vous même...
+    </div>
+{% endif %}
 
 <div class="container py-4">
     {% block body %}{% endblock %}

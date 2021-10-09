@@ -9,12 +9,15 @@ security:
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
-        # used to reload user from session & other features (e.g. switch_user)
+
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN_USER, ROLE_ADMIN_QUESTION, ROLE_ADMIN_ANSWER, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_EDITOR: [ROLE_ADMIN_QUESTION, ROLE_ADMIN_ANSWER]
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -27,6 +30,10 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+            switch_user: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -37,5 +44,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # IS_AUTHENTICATED_ANONYMOUSLY : tous les utilisateurs ont ce droit
+        # authentifié ou non
+        #- { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        # A partir du moment ou je suis authentifié, j'ai ce droit
+        # quelque soit mon rôle (c'est équivalent à check ROLE_USER
+        # puisque mon entité donne ce rôle à tout le monde)
+        #- { path: ^/, role: IS_AUTHENTICATED_FULLY }

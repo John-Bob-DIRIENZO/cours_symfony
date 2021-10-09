@@ -30,6 +30,11 @@ class QuestionController extends AbstractController
      */
     public function new(EntityManagerInterface $entityManager)
     {
+        $loggedUser = $this->getUser();
+
+
+        dd($loggedUser);
+
         return new Response('Un jour on fera ça...');
     }
 
