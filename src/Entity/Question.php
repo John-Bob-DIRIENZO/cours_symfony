@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
@@ -27,6 +29,7 @@ class Question
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("main")
      */
     private $name;
 
@@ -38,6 +41,7 @@ class Question
 
     /**
      * @ORM\Column(type="text")
+     * @Groups("main")
      */
     private $question;
 
@@ -60,6 +64,8 @@ class Question
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="question")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("main")
+     * @MaxDepth(1)
      */
     private $user;
 

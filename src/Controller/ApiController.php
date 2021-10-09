@@ -15,6 +15,8 @@ class ApiController extends AbstractController
     public function index(QuestionRepository $repository): Response
     {
         $questions = $repository->findAllAskedOrderByNewest();
-        return $this->json($questions);
+        return $this->json($questions, 200, [], [
+            'groups' => ['main']
+        ]);
     }
 }
