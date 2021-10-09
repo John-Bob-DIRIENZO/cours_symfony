@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Answer;
 use App\Entity\Tag;
 use App\Factory\AnswerFactory;
+use App\Factory\ApiTokenFactory;
 use App\Factory\QuestionFactory;
 use App\Factory\TagFactory;
 use App\Factory\UserFactory;
@@ -17,6 +18,7 @@ class AppFixtures extends Fixture
     {
         UserFactory::createMany(1);
         UserFactory::new()->roleAdmin()->many(5)->create();
+        ApiTokenFactory::createMany(10);
         TagFactory::createMany(100);
         QuestionFactory::createMany(10);
         QuestionFactory::new()->notPublished()->many(5)->create();
