@@ -95,6 +95,7 @@ class UserController extends AbstractController
      * @param User $user
      * @return Response
      * @Route("/user/{email}", name="app_user_show")
+     * @IsGranted("USER_VIEW", subject="user")
      */
     public function show(User $user): Response
     {

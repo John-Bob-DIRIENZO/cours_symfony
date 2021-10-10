@@ -3,15 +3,15 @@
 {% block title %}Tous les utilisateurs{% endblock %}
 
 {% block body %}
-<div class="p-5 mb-4 bg-light rounded-3">
-    <div class="container-fluid py-5">
-        <h1 class="display-4">Tous les utilisateurs</h1>
-        <p class="col-md-8 fs-4">Voilà la liste des utilisateurs actuels</p>
-        <a href="{{ path('app_user_new') }}">
-            <button class="btn btn-primary" type="button">Create user</button>
-        </a>
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-4">Tous les utilisateurs</h1>
+            <p class="col-md-8 fs-4">Voilà la liste des utilisateurs actuels</p>
+            <a href="{{ path('app_user_new') }}">
+                <button class="btn btn-primary" type="button">Create user</button>
+            </a>
+        </div>
     </div>
-</div>
 
 
     <div class="row">
@@ -27,7 +27,19 @@
                                      class="bd-placeholder-img rounded-circle">
                             </div>
                             <div class="col">
-                                <h2>{{ user.firstName }}</h2>
+
+                                <a href="{{ path('app_user_show', { email: user.email }) }}" type="button"
+                                   class="btn btn-primary position-relative">
+                                    {{ user.firstName }}
+
+                                    {% if is_granted("USER_VIEW", user) %}
+                                        <span class="position-absolute top-0 start-100 translate-middle p-2 bg-danger border border-light rounded-circle">
+                                            <span class="visually-hidden">New alerts</span>
+                                        </span>
+                                    {% endif %}
+
+                                </a>
+
                             </div>
                         </div>
                     </div>
