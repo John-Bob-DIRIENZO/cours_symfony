@@ -52,6 +52,11 @@ class ApiToken
         return $this->token;
     }
 
+    public function isExpired(): bool
+    {
+        return $this->getExpiresAt() <= new \DateTime();
+    }
+
 //    public function setToken(string $token): self
 //    {
 //        $this->token = $token;

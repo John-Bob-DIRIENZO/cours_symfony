@@ -25,14 +25,16 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            custom_authenticator:
+                - App\Security\LoginFormAuthenticator
+                - App\Security\ApiTokenAuthenticator
             logout:
                 path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800 # 1 week in seconds
+                lifetime: 604800
             switch_user: true
 
             # activate different ways to authenticate

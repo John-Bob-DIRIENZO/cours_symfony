@@ -4,16 +4,16 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
-/**
- * @IsGranted("ROLE_ADMIN_USER")
- */
 class UserController extends AbstractController
 {
     /**
@@ -31,11 +31,42 @@ class UserController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return Response
      * @Route("/user/new", name="app_user_new")
      */
-    public function new(): Response
+    public function new(Request                     $request,
+                        EntityManagerInterface      $entityManager,
+                        UserPasswordHasherInterface $hasher,
+                        UserAuthenticatorInterface  $authenticator,
+                        LoginFormAuthenticator      $loginFormAuthenticator): Response
     {
+        if ($request->isMethod('POST')) {
+            if (!empty($request->request->get('password'))
+                && !empty($request->request->get('password2'))
+                && $request->request->get('password') === $request->request->get('password2')
+                && $this->isCsrfTokenValid('register_form', $request->request->get('csrf'))) {
+
+                $user = new User();
+                $user->setFirstName($request->request->get('firstName'))
+                    ->setLastName($request->request->get('lastName'))
+                    ->setEmail($request->request->get('email'))
+                    ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $authenticator->authenticateUser(
+                    $user,
+                    $loginFormAuthenticator,
+                    $request
+                );
+            }
+            return $this->render('user/user_new.html.twig', [
+                'error' => 'Les deux password ne sont pas identiques'
+            ]);
+        }
         return $this->render('user/user_new.html.twig');
     }
 
