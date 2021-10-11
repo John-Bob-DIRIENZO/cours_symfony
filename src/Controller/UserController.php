@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,32 +43,28 @@ class UserController extends AbstractController
                         UserAuthenticatorInterface  $authenticator,
                         LoginFormAuthenticator      $loginFormAuthenticator): Response
     {
-        if ($request->isMethod('POST')) {
-            if (!empty($request->request->get('password'))
-                && !empty($request->request->get('password2'))
-                && $request->request->get('password') === $request->request->get('password2')
-                && $this->isCsrfTokenValid('register_form', $request->request->get('csrf'))) {
+        $form = $this->createForm(RegistrationFormType::class);
 
-                $user = new User();
-                $user->setFirstName($request->request->get('firstName'))
-                    ->setLastName($request->request->get('lastName'))
-                    ->setEmail($request->request->get('email'))
-                    ->setPassword($hasher->hashPassword($user, $request->request->get('password')));
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var $newUser User */
+            $newUser = $form->getData();
 
-                $entityManager->persist($user);
-                $entityManager->flush();
+            $plainPassword = $form['plainPassword']->getData();
+            $newUser->setPassword($hasher->hashPassword($newUser, $plainPassword));
 
-                return $authenticator->authenticateUser(
-                    $user,
-                    $loginFormAuthenticator,
-                    $request
-                );
-            }
-            return $this->render('user/user_new.html.twig', [
-                'error' => 'Les deux password ne sont pas identiques'
-            ]);
+            $entityManager->persist($newUser);
+            $entityManager->flush();
+
+            return $authenticator->authenticateUser(
+                $newUser,
+                $loginFormAuthenticator,
+                $request
+            );
         }
-        return $this->render('user/user_new.html.twig');
+        return $this->render('user/user_new.html.twig', [
+            'userForm' => $form->createView()
+        ]);
     }
 
     /**

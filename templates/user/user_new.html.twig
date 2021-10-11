@@ -1,39 +1,48 @@
 {% extends "base.html.twig" %}
+    {#
+    Sur cette page ce trouve un block de thème
+    pour un formulaire, utilisé uniquement sur cette page
+    #}
+{% form_theme userForm _self %}
+
+{% block _registration_form_submit_widget %}
+    <button class="btn btn-primary w-100" type="submit">Allez c'est parti !</button>
+{% endblock %}
+
+{%- block form_row -%}
+    {%- if compound is defined and compound -%}
+        {%- set element = 'fieldset' -%}
+    {%- endif -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    {%- set row_class = row_class|default(row_attr.class|default('mb-3 form-floating')|trim) -%}
+    <{{ element|default('div') }}{% with {attr: row_attr|merge({class: row_class})} %}{{ block('attributes') }}{% endwith %}>
+    {%- if 'form-floating' in row_class -%}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_label(form) -}}
+    {%- else -%}
+
+        {# Je vais rajouter une classe à tous mes labels #}
+        {{- form_label(form, null, {
+            label_attr: { class: 'une random classe' }
+        }
+        ) -}}
+
+        {{- form_widget(form, widget_attr) -}}
+    {%- endif -%}
+    {{- form_help(form) -}}
+    {{- form_errors(form) -}}
+    </{{ element|default('div') }}>
+{%- endblock form_row %}
 
 {% block title %}Create User{% endblock %}
 
 {% block body %}
-
-    <form class="mx-auto mt-5" style="max-width: 400px" method="post">
-        <h1 class="text-center">Create User</h1>
-
-        {% if error|default %}
-            <div class="alert alert-danger">{{ error }}</div>
-        {% endif %}
-
-        <div class="mb-2">
-            <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" name="firstName" required>
-        </div>
-        <div class="mb-2">
-            <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" name="lastName" required>
-        </div>
-        <div class="mb-2">
-            <label for="email" class="form-label">Email address</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <div class="mb-2">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <div class="mb-3">
-            <label for="password2" class="form-label">Verify Password</label>
-            <input type="password" class="form-control" id="password2" name="password2" required>
-        </div>
-        {# CSRF #}
-        <input type="hidden" name="csrf" value="{{ csrf_token('register_form') }}">
-        <button type="submit" class="btn btn-primary w-100">Register</button>
-    </form>
+    <h1 class="text-center">Create new User</h1>
+    <div class="mx-auto mt-5" style="max-width: 400px">
+        {{ form(userForm) }}
+    </div>
 
 {% endblock %}

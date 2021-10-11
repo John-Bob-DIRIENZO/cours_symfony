@@ -47,7 +47,8 @@ final class UserFactory extends ModelFactory
     {
         return [
             'firstName' => self::faker()->firstName(),
-            'lastName' => self::faker()->lastName()
+            'lastName' => self::faker()->lastName(),
+            'agreedTermsAt' => self::faker()->dateTimeBetween('-1 year', '-1 second')
         ];
     }
 
