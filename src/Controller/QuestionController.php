@@ -54,7 +54,6 @@ class QuestionController extends AbstractController
              * @var $question Question
              */
             $question = $form->getData();
-            $question->setUser($this->getUser());
 
             $em->persist($question);
             $em->flush();
@@ -65,7 +64,8 @@ class QuestionController extends AbstractController
         }
 
         return $this->render('question/new.html.twig', [
-            'questionForm' => $form->createView()
+            'questionForm' => $form->createView(),
+            'titre' => 'Create Question'
         ]);
     }
 
@@ -112,6 +112,37 @@ class QuestionController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_homepage');
+    }
+
+    /**
+     * @Route("questions/{slug}/edit", name="app_question_edit")
+     * @IsGranted("ROLE_ADMIN_QUESTION")
+     */
+    public function edit(Question $question, Request $request, EntityManagerInterface $em)
+    {
+        // Je passe ma question en second argument
+        $form = $this->createForm(QuestionFormType::class, $question);
+
+        // Le reste ne change pas
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var $question Question
+             */
+            $question = $form->getData();
+
+            $em->persist($question);
+            $em->flush();
+
+            $this->addFlash('success', 'Bien joué, votre question est updatée');
+
+            return $this->redirectToRoute('app_show', ['slug' => $question->getSlug()]);
+        }
+
+        return $this->render('question/new.html.twig', [
+            'questionForm' => $form->createView(),
+            'titre' => 'Edit Question'
+        ]);
     }
 }
 

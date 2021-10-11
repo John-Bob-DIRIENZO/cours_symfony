@@ -19,6 +19,18 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    /**
+     * @return User[]
+     */
+    public function findAllNonAdmin()
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.roles NOT LIKE :role')
+            ->setParameter('role', '%ADMIN%')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

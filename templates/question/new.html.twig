@@ -3,11 +3,11 @@
 {% block title %}Nouvelle question{% endblock %}
 
 {% block body %}
-    <h1>Nouvelle question !</h1>
+    <h1 class="text-center">{{ titre }}</h1>
 
-    {{ form_start(questionForm) }}
-    {{ form_widget(questionForm) }}
-    <button type="submit" class="btn btn-primary">Create</button>
-    {{ form_end(questionForm) }}
+    <div style="max-width: 450px" class="mx-auto">
 
+        {{ form(questionForm) }}
+
+    </div>
 {% endblock %}

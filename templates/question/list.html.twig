@@ -15,7 +15,7 @@
 
             <li class="list-group-item clearfix">
                 <p style="color: red">{{ question.published ? 'Published' : 'NOT PUBLISED' }} -- {{ question.user.firstName }}</p>
-                <p>{{ question.user.firstName }} : {{ question.question }}</p>
+                <p>{{ question.user.firstName }} : {{ question.name }}</p>
             </li>
         {% endfor %}
     </ul>

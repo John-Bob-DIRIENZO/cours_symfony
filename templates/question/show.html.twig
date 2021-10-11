@@ -12,6 +12,7 @@
                  height="140" style="object-fit: cover">
 
             <h1 class="display-5 fw-bold">{{ question.name }}</h1>
+            <a href="{{ path('app_question_edit', {slug: question.slug}) }}" class="btn btn-warning mb-3">Edit Question</a>
 
             <div class="mb-3">
                 {% for tag in question.tag %}

@@ -12,6 +12,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass=QuestionRepository::class)
@@ -30,6 +32,7 @@ class Question
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("main")
+     * @Assert\NotBlank(message="Mon messsage d'erreur")
      */
     private $name;
 
@@ -240,5 +243,17 @@ class Question
         $this->tag->removeElement($tag);
 
         return $this;
+    }
+
+    /**
+     * @Assert\Callback()
+     */
+    public function validate(ExecutionContextInterface $context)
+    {
+        if (strpos($this->getName(), 'Francis') !== false) {
+            $context->buildViolation('On avait dit pas Francis !')
+                ->atPath('name')
+                ->addViolation();
+        }
     }
 }
