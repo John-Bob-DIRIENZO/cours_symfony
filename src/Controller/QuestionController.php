@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Question;
+use App\Form\QuestionFormType;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,16 +28,45 @@ class QuestionController extends AbstractController
     }
 
     /**
-     * @Route("/questions/new")
+     * @param QuestionRepository $repository
+     * @return Response
+     * @Route("/questions/list", name="app_question_list")
      */
-    public function new(EntityManagerInterface $entityManager)
+    public function listAll(QuestionRepository $repository)
     {
-        $loggedUser = $this->getUser();
+        $questions = $repository->findBy([], ['createdAt' => 'DESC']);
+        return $this->render('question/list.html.twig', [
+            'questions' => $questions
+        ]);
+    }
 
+    /**
+     * @Route("/questions/new", name="app_question_new")
+     * @IsGranted("ROLE_USER")
+     */
+    public function new(Request $request, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(QuestionFormType::class);
 
-        dd($loggedUser);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var $question Question
+             */
+            $question = $form->getData();
+            $question->setUser($this->getUser());
 
-        return new Response('Un jour on fera ça...');
+            $em->persist($question);
+            $em->flush();
+
+            $this->addFlash('success', 'Bien joué, une nouvelle question');
+
+            return $this->redirectToRoute('app_question_list');
+        }
+
+        return $this->render('question/new.html.twig', [
+            'questionForm' => $form->createView()
+        ]);
     }
 
     /**
@@ -59,8 +90,7 @@ class QuestionController extends AbstractController
         $vote = $request->request->get('vote');
         if ($vote === 'up') {
             $question->upVote();
-        }
-        elseif ($vote === 'down') {
+        } elseif ($vote === 'down') {
             $question->downVote();
         }
 

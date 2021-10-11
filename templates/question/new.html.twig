@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle question{% endblock %}
+
+{% block body %}
+    <h1>Nouvelle question !</h1>
+
+    {{ form_start(questionForm) }}
+    {{ form_widget(questionForm) }}
+    <button type="submit" class="btn btn-primary">Create</button>
+    {{ form_end(questionForm) }}
+
+{% endblock %}

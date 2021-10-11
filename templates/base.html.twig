@@ -28,7 +28,7 @@
                 <li><a href="{{ path('app_user_index') }}" class="nav-link px-2 text-white">Users</a></li>
                 <li><a href="{{ path('app_answers_popular') }}" class="nav-link px-2 text-white">Popular answers</a>
                 </li>
-                <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                <li><a href="{{ path('app_question_list') }}" class="nav-link px-2 text-white">All questions</a></li>
                 <li><a href="#" class="nav-link px-2 text-white">About</a></li>
             </ul>
 
@@ -55,6 +55,12 @@
         Attention, vous n'êtes pas réellement vous même...
     </div>
 {% endif %}
+
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
 
 <div class="container py-4">
     {% block body %}{% endblock %}

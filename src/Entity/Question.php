@@ -133,6 +133,11 @@ class Question
         return $this;
     }
 
+    public function isPublished(): bool
+    {
+        return $this->getAskedAt() !== null;
+    }
+
     public function getVotes(): ?int
     {
         return $this->votes;
