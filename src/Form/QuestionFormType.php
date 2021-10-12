@@ -24,22 +24,28 @@ class QuestionFormType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $question = $options['data'] ?? null;
+        $isEdit = $question && $question->getId();
+
         $builder
             ->add('name', TextType::class, [
                 'help' => 'Je suis une aide pas très utile'
             ])
             ->add('question')
             ->add('askedAt', DateType::class, [
-                'widget' => 'single_text'
+                'widget' => 'single_text',
             ])
-            ->add('user', UserSelectTextType::class)
+            ->add('user', UserSelectTextType::class, [
+                'disabled' => $isEdit // Vérification aussi coté server
+            ])
             ->add('submit', SubmitType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Question::class
+            'data_class' => Question::class,
+            'include_askedAt' => false
         ]);
     }
 }

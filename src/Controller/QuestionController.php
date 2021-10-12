@@ -120,8 +120,10 @@ class QuestionController extends AbstractController
      */
     public function edit(Question $question, Request $request, EntityManagerInterface $em)
     {
-        // Je passe ma question en second argument
-        $form = $this->createForm(QuestionFormType::class, $question);
+        // Je passe ma question en second argument et mes options en 3ème
+        $form = $this->createForm(QuestionFormType::class, $question, [
+            'include_askedAt' => true
+        ]);
 
         // Le reste ne change pas
         $form->handleRequest($request);
