@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use App\Repository\AnswerRepository;
 use App\Repository\QuestionRepository;
+use App\Service\UploadHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Sluggable\Util\Urlizer;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -76,6 +79,11 @@ class Question
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="questions")
      */
     private $tag;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imageFilename;
 
     public function __construct()
     {
@@ -255,5 +263,24 @@ class Question
                 ->atPath('name')
                 ->addViolation();
         }
+    }
+
+    public function getImageFilename(): ?string
+    {
+        return $this->imageFilename;
+    }
+
+    public function setImageFilename(string $imageFilename): self
+    {
+        $this->imageFilename = $imageFilename;
+
+        return $this;
+    }
+
+    public function getImagePath()
+    {
+        return $this->getImageFilename() === null ?
+            UploadHelper::DEFAULT_IMAGE :
+            UploadHelper::QUESTION_IMAGE . '/' . $this->getImageFilename();
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Question;
 use App\Form\QuestionFormType;
 use App\Repository\QuestionRepository;
+use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Sluggable\Util\Urlizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -46,7 +47,7 @@ class QuestionController extends AbstractController
      * @Route("/questions/new", name="app_question_new")
      * @IsGranted("ROLE_USER")
      */
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, UploadHelper $helper): Response
     {
         $emptyQuestion = new Question();
         $emptyQuestion->setUser($this->getUser());
@@ -54,10 +55,15 @@ class QuestionController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /**
-             * @var $question Question
-             */
+            /** @var $question Question */
             $question = $form->getData();
+
+            // Toute ma logique d'upload
+            $newFile = $form['imageFile']->getData();
+            if ($newFile) {
+                $fileName = $helper->uploadQuestionImage($newFile);
+                $question->setImageFilename($fileName);
+            }
 
             $em->persist($question);
             $em->flush();
@@ -122,7 +128,7 @@ class QuestionController extends AbstractController
      * @Route("questions/{slug}/edit", name="app_question_edit")
      * @IsGranted("ROLE_ADMIN_QUESTION")
      */
-    public function edit(Question $question, Request $request, EntityManagerInterface $em)
+    public function edit(Question $question, Request $request, EntityManagerInterface $em, UploadHelper $helper)
     {
         // Je passe ma question en second argument et mes options en 3ème
         $form = $this->createForm(QuestionFormType::class, $question, [
@@ -132,10 +138,15 @@ class QuestionController extends AbstractController
         // Le reste ne change pas
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /**
-             * @var $question Question
-             */
+            /** @var $question Question */
             $question = $form->getData();
+
+            // Toute ma logique d'upload
+            $newFile = $form['imageFile']->getData();
+            if ($newFile) {
+                $fileName = $helper->uploadQuestionImage($newFile);
+                $question->setImageFilename($fileName);
+            }
 
             $em->persist($question);
             $em->flush();

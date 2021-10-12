@@ -8,11 +8,14 @@
 {% block body %}
     <div class="p-5 mb-4 bg-light rounded-3">
         <div class="container-fluid py-5">
-            <img src="{{ asset('images/cute_cat.jpg') }}" class="bd-placeholder-img rounded-circle" width="140"
+
+            <img src="{{ asset(question.imagePath) | imagine_filter('square_thumb') }}"
+                 class="bd-placeholder-img rounded-circle" width="140"
                  height="140" style="object-fit: cover">
 
             <h1 class="display-5 fw-bold">{{ question.name }}</h1>
-            <a href="{{ path('app_question_edit', {slug: question.slug}) }}" class="btn btn-warning mb-3">Edit Question</a>
+            <a href="{{ path('app_question_edit', {slug: question.slug}) }}" class="btn btn-warning mb-3">Edit
+                Question</a>
 
             <div class="mb-3">
                 {% for tag in question.tag %}
@@ -49,8 +52,12 @@
                         <small>{{ answer.createdAt|ago }} -- </small>{{ answer.user.firstName }} : {{ answer.content }}
 
                         <div class="col float-end js-vote">
-                            <button class="badge bg-success js-vote-up" data-direction="up" data-id="{{ answer.id }}">vote up</button>
-                            <button class="badge bg-danger js-vote-down" data-direction="down" data-id="{{ answer.id }}">vote down</button>
+                            <button class="badge bg-success js-vote-up" data-direction="up" data-id="{{ answer.id }}">
+                                vote up
+                            </button>
+                            <button class="badge bg-danger js-vote-down" data-direction="down"
+                                    data-id="{{ answer.id }}">vote down
+                            </button>
                             <span class="badge bg-secondary mx-3 js-vote-total">{{ answer.votes }}</span>
                         </div>
 

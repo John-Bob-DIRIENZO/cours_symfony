@@ -4,6 +4,8 @@ namespace App\Factory;
 
 use App\Entity\Question;
 use App\Repository\QuestionRepository;
+use App\Service\UploadHelper;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
@@ -29,11 +31,18 @@ use Zenstruck\Foundry\Proxy;
  */
 final class QuestionFactory extends ModelFactory
 {
-    public function __construct()
+    private static $randomImages = [
+        'random1.jpg',
+        'random2.jpg',
+        'random3.jpg',
+        'random4.jpg',
+    ];
+    private UploadHelper $helper;
+
+    public function __construct(UploadHelper $helper)
     {
         parent::__construct();
-
-        // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
+        $this->helper = $helper;
     }
 
     public function notPublished(): self
@@ -51,7 +60,11 @@ final class QuestionFactory extends ModelFactory
             'votes' => rand(-20, 50),
             'askedAt' => self::faker()->dateTimeBetween('-100 days', '-1 second'),
             'user' => UserFactory::random(),
-            'tag' => TagFactory::randomRange(1, 6)
+            'tag' => TagFactory::randomRange(1, 6),
+
+            'imageFilename' => $this->helper->fixtureUpload(
+                new File(__DIR__.'/Randoms/'.self::faker()->randomElement(self::$randomImages))
+            )
         ];
     }
 
