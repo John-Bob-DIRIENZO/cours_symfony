@@ -1,0 +1,15 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        default.storage: # ce nom est arbitraire
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public'
+
+        # Je peux créer plusieurs lieux de storages
+        upload.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/uploads'
+
+

@@ -142,6 +142,25 @@
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
+    "league/flysystem": {
+        "version": "2.3.0"
+    },
+    "league/flysystem-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "913dc3d7a5a1af0d2b044c5ac3a16e2f851d7380"
+        },
+        "files": [
+            "config/packages/flysystem.yaml",
+            "var/storage/.gitignore"
+        ]
+    },
+    "league/mime-type-detection": {
+        "version": "1.8.0"
+    },
     "liip/imagine-bundle": {
         "version": "1.8",
         "recipe": {

@@ -144,7 +144,7 @@ class QuestionController extends AbstractController
             // Toute ma logique d'upload
             $newFile = $form['imageFile']->getData();
             if ($newFile) {
-                $fileName = $helper->uploadQuestionImage($newFile);
+                $fileName = $helper->uploadQuestionImage($newFile, $question->getImageFilename());
                 $question->setImageFilename($fileName);
             }
 
