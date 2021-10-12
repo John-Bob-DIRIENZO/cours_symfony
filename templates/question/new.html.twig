@@ -3,6 +3,12 @@
 {% block title %}Nouvelle question{% endblock %}
 
 {% block body %}
+
+    <form method="post" action="{{ path('app_test_upload') }}" enctype="multipart/form-data">
+        <input type="file" name="image">
+        <button type="submit" class="btn btn-primary">Upload !</button>
+    </form>
+
     <h1 class="text-center">{{ titre }}</h1>
 
     <div style="max-width: 450px" class="mx-auto">

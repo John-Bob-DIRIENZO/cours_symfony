@@ -6,7 +6,9 @@ use App\Entity\Question;
 use App\Form\QuestionFormType;
 use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Sluggable\Util\Urlizer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\PsrHttpMessage\Factory\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +48,9 @@ class QuestionController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $em): Response
     {
-        $form = $this->createForm(QuestionFormType::class);
+        $emptyQuestion = new Question();
+        $emptyQuestion->setUser($this->getUser());
+        $form = $this->createForm(QuestionFormType::class, $emptyQuestion);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -145,6 +149,25 @@ class QuestionController extends AbstractController
             'questionForm' => $form->createView(),
             'titre' => 'Edit Question'
         ]);
+    }
+
+    /**
+     * @Route("/questions/test/upload", name="app_test_upload")
+     */
+    public function uploadTest(Request $request)
+    {
+        /** @var UploadedFile $newFile */
+        $newFile = $request->files->get('image');
+        $destination = $this->getParameter('kernel.project_dir') . '/public/uploads';
+        $originalFileName = $newFile->getClientOriginalName();
+        $baseFileName = pathinfo($originalFileName, PATHINFO_FILENAME);
+
+        // Un nom de fichier URL Friendly
+        $fileName = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $newFile->guessExtension();
+
+        $newFile->move($destination, $fileName);
+
+        return new Response('yeah gagné');
     }
 }
 
