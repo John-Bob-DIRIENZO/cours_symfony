@@ -16,6 +16,8 @@ Une fois ceci fait, vous avez un beau projet Symfony prêt
 
 Comme nous avons rajouté Doctrine, une Database MariaDB 
 avec Docker et maintenant des Fixtures !
+
+Tous les utilisateurs ont le mot de passe "password"
 ````
 symfony serve -d
 docker-compose up -d
