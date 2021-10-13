@@ -22,10 +22,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class QuestionReferenceController extends AbstractController
 {
     /**
-     * @param Request $request
-     * @param EntityManagerInterface $entityManager
-     * @param UploadHelper $helper
      * @Route("admin/question/references/{id}/upload", name="app_upload_question_reference", methods={"POST"})
+     * @IsGranted("ROLE_ADMIN_QUESTION")
      */
     public function uploadReference(Question               $question,
                                     Request                $request,
@@ -76,10 +74,11 @@ class QuestionReferenceController extends AbstractController
         $response->setCallback(function () use ($reference, $helper) {
             $outputStream = fopen('php://output', 'wb');
             $fileStream = $helper->readPrivateStream($reference->getFilePath());
-
             stream_copy_to_stream($fileStream, $outputStream);
         });
+
         $response->headers->set('Content-Type', $reference->getMimeType());
+
         $disposition = HeaderUtils::makeDisposition(
             HeaderUtils::DISPOSITION_INLINE,
             Urlizer::urlize($reference->getOriginalFilename())

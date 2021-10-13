@@ -28,8 +28,8 @@
             {{ form_row(questionForm.user) }}
             {{ form_row(questionForm.submit) }}
             {{ form_end(questionForm) }}
-
         </div>
+
         {% if questionForm.vars.data.id|default %}
             <div class="col-md-4">
                 <h2 class="text-center">Upload References</h2>
@@ -50,8 +50,6 @@
                         </li>
                     {% endfor %}
                 </ul>
-
-
             </div>
         {% endif %}
 
