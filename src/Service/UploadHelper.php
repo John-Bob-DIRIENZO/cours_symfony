@@ -12,14 +12,17 @@ class UploadHelper
 {
     const QUESTION_IMAGE = 'uploads/questions_images';
     const DEFAULT_IMAGE = 'images/cute_cat.jpg';
+    const QUESTION_REFERENCE = 'question_reference';
 
     private string $publicPath;
     private FilesystemOperator $defaultStorage;
+    private FilesystemOperator $privateStorage;
 
-    public function __construct(string $publicPath, FilesystemOperator $defaultStorage)
+    public function __construct(string $publicPath, FilesystemOperator $defaultStorage, FilesystemOperator $privateStorage)
     {
         $this->publicPath = $publicPath;
         $this->defaultStorage = $defaultStorage;
+        $this->privateStorage = $privateStorage;
     }
 
     /**
@@ -77,6 +80,41 @@ class UploadHelper
         // $fs->copy($file->getRealPath(), $destination . '/' .$fileName, true);
 
         return $fileName;
+    }
+
+    /**
+     * @param File $file
+     * @return string
+     */
+    public function uploadPrivateFile(File $file): string
+    {
+        // Presque rien ne change
+        $originalFileName = $file->getFilename();
+        $baseFileName = pathinfo($originalFileName, PATHINFO_FILENAME);
+        $fileName = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $file->guessExtension();
+
+        $stream = fopen($file->getPathname(), 'r');
+        // Sauf le lieu de stockage
+        $this->privateStorage->writeStream(
+            self::QUESTION_REFERENCE . '/' . $fileName,
+            $stream
+        );
+
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+
+        return $fileName;
+    }
+
+    /**
+     * @param string $path
+     * @return resource
+     * @throws \League\Flysystem\FilesystemException
+     */
+    public function readPrivateStream(string $path)
+    {
+        return $this->privateStorage->readStream($path);
     }
 
     /**

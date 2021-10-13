@@ -85,10 +85,16 @@ class Question
      */
     private $imageFilename;
 
+    /**
+     * @ORM\OneToMany(targetEntity=QuestionReference::class, mappedBy="question")
+     */
+    private $questionReferences;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->tag = new ArrayCollection();
+        $this->questionReferences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -282,5 +288,35 @@ class Question
         return $this->getImageFilename() === null ?
             UploadHelper::DEFAULT_IMAGE :
             UploadHelper::QUESTION_IMAGE . '/' . $this->getImageFilename();
+    }
+
+    /**
+     * @return Collection|QuestionReference[]
+     */
+    public function getQuestionReferences(): Collection
+    {
+        return $this->questionReferences;
+    }
+
+    public function addQuestionReference(QuestionReference $questionReference): self
+    {
+        if (!$this->questionReferences->contains($questionReference)) {
+            $this->questionReferences[] = $questionReference;
+            $questionReference->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestionReference(QuestionReference $questionReference): self
+    {
+        if ($this->questionReferences->removeElement($questionReference)) {
+            // set the owning side to null (unless already changed)
+            if ($questionReference->getQuestion() === $this) {
+                $questionReference->setQuestion(null);
+            }
+        }
+
+        return $this;
     }
 }

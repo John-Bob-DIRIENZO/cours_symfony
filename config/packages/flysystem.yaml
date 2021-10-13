@@ -1,6 +1,12 @@
 # Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
 flysystem:
     storages:
+        private.storage: # ce nom est arbitraire
+            adapter: 'local'
+            options:
+                # Le dossier /var est parfait pour cet usage
+                directory: '%kernel.project_dir%/var/uploads'
+
         default.storage: # ce nom est arbitraire
             adapter: 'local'
             options:
@@ -12,9 +18,5 @@ flysystem:
             options:
                 directory: '%kernel.project_dir%/public/uploads'
 
-        private.storage: # ce nom est arbitraire
-            adapter: 'local'
-            options:
-                directory: '%kernel.project_dir%/var/uploads'
 
 

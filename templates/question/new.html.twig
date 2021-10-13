@@ -3,28 +3,57 @@
 {% block title %}Nouvelle question{% endblock %}
 
 {% block body %}
-    <h1 class="text-center">{{ titre }}</h1>
 
-    <div style="max-width: 450px" class="mx-auto">
 
-        {{ form_start(questionForm) }}
-        {{ form_row(questionForm.name) }}
-        {{ form_row(questionForm.question) }}
+    <div class="row">
 
-        {% if questionForm.vars.data.imageFilename != null %}
-            <div class="text-center">
-                <p>Image de la question</p>
-                <img src="{{ asset(questionForm.vars.data.imagePath) }}" width="150"
-                     height="150"
-                     class="bd-placeholder-img rounded-circle" style="object-fit: cover">
+
+        <div class="mx-auto col-md-8">
+            <h2 class="text-center">{{ titre }}</h2>
+            {{ form_start(questionForm) }}
+            {{ form_row(questionForm.name) }}
+            {{ form_row(questionForm.question) }}
+
+            {% if questionForm.vars.data.imageFilename != null %}
+                <div class="text-center">
+                    <p>Image de la question</p>
+                    <img src="{{ asset(questionForm.vars.data.imagePath) }}" width="150"
+                         height="150"
+                         class="bd-placeholder-img rounded-circle" style="object-fit: cover">
+                </div>
+            {% endif %}
+            {{ form_row(questionForm.imageFile) }}
+
+            {{ form_row(questionForm.askedAt) }}
+            {{ form_row(questionForm.user) }}
+            {{ form_row(questionForm.submit) }}
+            {{ form_end(questionForm) }}
+
+        </div>
+        {% if questionForm.vars.data.id|default %}
+            <div class="col-md-4">
+                <h2 class="text-center">Upload References</h2>
+                <form action="{{ path('app_upload_question_reference', {id: questionForm.vars.data.id}) }}"
+                      method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <input type="file" class="form-control" name="reference">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+                <ul class="list-group mt-5">
+                    {% for reference in questionForm.vars.data.questionReferences %}
+                        <li class="list-group-item">
+                            <a href="{{ path('app_download_question_reference', {id: reference.id}) }}" target="_blank">
+                                {{ reference.originalFilename }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+
             </div>
         {% endif %}
-        {{ form_row(questionForm.imageFile) }}
-
-        {{ form_row(questionForm.askedAt) }}
-        {{ form_row(questionForm.user) }}
-        {{ form_row(questionForm.submit) }}
-        {{ form_end(questionForm) }}
 
     </div>
 {% endblock %}
