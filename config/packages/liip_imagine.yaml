@@ -1,19 +1,35 @@
 # See dos how to configure the bundle: https://symfony.com/doc/current/bundles/LiipImagineBundle/basic-usage.html
 liip_imagine:
+    loaders:
+        # Ce nom est arbitraire
+        my_flysystem_loader:
+            flysystem:
+                # Pour aller chercher les images originales
+                filesystem_service: default.storage
+    data_loader: my_flysystem_loader
+
+    resolvers:
+        my_flysystem_resolver:
+            flysystem:
+                # Système pour écrire le cache
+                # Ici un autre service flysystem qui pointe
+                # vers une autre adresse pour le fun
+                filesystem_service: upload.storage
+                # Le chemin de lecture du cache
+                # à changer si migration
+                root_url: "/uploads"
+                cache_prefix: media/cache
+    cache: my_flysystem_resolver
+
     # valid drivers options include "gd" or "gmagick" or "imagick"
     driver: "gd"
-    resolvers:
-        default:
-            web_path: ~
+    #    resolvers:
+    #        default:
+    #            web_path: ~
     filter_sets:
         cache: ~
-        # the name of the "filter set"
         square_thumb:
-            # adjust the image quality to 75%
             quality: 50
-            # list of transformations to apply (the "filters")
             filters:
-                # create a thumbnail: set size to 120x90 and use the "outbound" mode
-                # to crop the image when the size ratio of the input differs
                 thumbnail: { size: [ 200, 200 ], mode: outbound }
 
